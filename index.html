@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title> Merve Özdemir | Daily </title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary: #d90429; 
+    --primary-dark: #8d0801; 
+    --bg-dark: #0b090a; 
+    --glass-bg: rgba(20, 20, 20, 0.4); 
+    --glass-border: rgba(255, 255, 255, 0.06);
+    --text-main: #f8f9fa;
+    --text-muted: rgba(255, 255, 255, 0.4);
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    background-color: var(--bg-dark);
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-main);
+    background-color: transparent; /* Burayı değiştirdik */
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+ /* GHOST (HAYALET) ARKA PLAN GÖRSELİ */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: url('https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?q=80&w=1920&auto=format&fit=crop') center 30% / cover no-repeat;
+    /* Gözünü yormaması ve okunaklılığı bozmaması için opaklığı 0.25'ten 0.18'e düşürdük */
+    opacity: 0.18; 
+    /* Parlaklığı artıran brightness filtresini kaldırdık, sadece kontrastı bıraktık */
+    filter: contrast(1.1);
+    /* -1 olarak kaldı ki renklerin altına düşmesin */
+    z-index: -1; 
+    pointer-events: none;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle at 50% 30%, rgba(217, 4, 41, 0.08), transparent 60%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  /* --- NAVBAR --- */
+  .navbar {
+    width: 100%;
+    /* Ekran boyutuna göre otomatik padding (Akışkan) */
+    padding: clamp(15px, 3vw, 25px) clamp(20px, 5vw, 50px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(11, 9, 10, 0.95), transparent);
+    position: fixed;
+    top: 0;
+    z-index: 50;
+  }
+
+  .nav-logo {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(20px, 4vw, 26px);
+    font-weight: 300;
+    color: var(--text-main);
+    letter-spacing: 4px;
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--primary); font-weight: 600; }
+
+  .nav-links { display: flex; gap: clamp(15px, 3vw, 40px); }
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.4s;
+    cursor: pointer;
+  }
+  .nav-links a:hover { color: var(--primary); }
+
+  /* --- VIEW YÖNETİMİ --- */
+  .main-content {
+    flex: 1;
+    margin-top: clamp(70px, 10vw, 100px); 
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .view-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: clamp(20px, 4vw, 40px) clamp(15px, 4vw, 20px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(40px);
+    transition: all 0.7s cubic-bezier(0.25, 1, 0.5, 1); 
+  }
+  .view-section.active {
+    position: relative;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  /* --- LANDING PAGE --- */
+  .hero {
+    width: 100%;
+    max-width: 1100px;
+    margin: clamp(40px, 8vw, 80px) auto clamp(20px, 5vw, 40px) auto;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-family: 'Montserrat', sans-serif;
+    /* 32px ile 64px arası akışkan font */
+    font-size: clamp(32px, 6vw, 64px);
+    font-weight: 200;
+    margin-bottom: clamp(15px, 3vw, 25px);
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+  .hero h1 span { font-style: italic; color: var(--primary); font-weight: 400;}
+
+  .hero p {
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--text-muted);
+    max-width: 650px;
+    margin: 0 auto clamp(30px, 6vw, 50px) auto;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .hero-btn {
+    padding: clamp(15px, 3vw, 20px) clamp(30px, 6vw, 50px);
+    font-size: clamp(13px, 2vw, 15px);
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    box-shadow: 0 10px 30px rgba(217, 4, 41, 0.2);
+  }
+  .hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(217, 4, 41, 0.4);
+  }
+
+  .features {
+    display: grid;
+    /* Kartlar sığmazsa alt alta atar (Responsive) */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: clamp(20px, 4vw, 40px);
+    max-width: 1100px;
+    margin: clamp(50px, 10vw, 100px) auto 0 auto;
+  }
+
+  .feature-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: clamp(25px, 5vw, 40px) clamp(20px, 4vw, 30px);
+    border-radius: 20px;
+    text-align: center;
+    backdrop-filter: blur(15px);
+    transition: all 0.4s ease;
+  }
+  .feature-card:hover {
+    transform: translateY(-10px);
+    border-color: rgba(217, 4, 41, 0.3);
+    background: rgba(30, 30, 30, 0.6);
+  }
+
+  .feature-icon {
+    font-size: clamp(26px, 4vw, 32px);
+    margin-bottom: 20px;
+    opacity: 0.8;
+  }
+
+  .feature-card h4 {
+    font-family: 'Montserrat', sans-serif;
+    color: #fff;
+    font-size: clamp(16px, 2.5vw, 18px);
+    margin-bottom: 15px;
+    font-weight: 500;
+    letter-spacing: 1px;
+  }
+
+  .feature-card p {
+    font-size: clamp(13px, 2vw, 14px);
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* --- BOOKING APP (WIZARD) --- */
+  .container {
+    width: 100%;
+    max-width: 900px;
+    margin: auto;
+    background: var(--glass-bg);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1px solid var(--glass-border);
+    border-radius: clamp(16px, 4vw, 24px);
+    padding: clamp(25px, 5vw, 50px);
+    box-shadow: 0 20px 50px 0 rgba(0, 0, 0, 0.7);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .back-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(11px, 2vw, 13px);
+    letter-spacing: 1px;
+    cursor: pointer;
+    margin-bottom: clamp(20px, 4vw, 30px);
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.3s;
+    text-transform: uppercase;
+  }
+  .back-btn:hover { color: var(--primary); }
+
+  /* Progress Bar */
+  .progress-container {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.05);
+    margin-bottom: clamp(20px, 4vw, 30px);
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, var(--primary-dark), var(--primary));
+    width: 20%;
+    transition: width 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  .step-indicator {
+    text-align: right;
+    font-size: 11px;
+    color: var(--primary);
+    margin-top: -15px;
+    margin-bottom: clamp(25px, 5vw, 40px);
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Wizard Steps */
+  .wizard-step {
+    display: none;
+    animation: fadeInSlideUp 0.6s ease forwards;
+  }
+  .wizard-step.active { display: block; }
+
+  @keyframes fadeInSlideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .wizard-step h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(22px, 4vw, 28px);
+    font-weight: 300;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .wizard-step p.step-desc {
+    color: var(--text-muted);
+    margin-bottom: clamp(20px, 4vw, 35px);
+    font-size: clamp(13px, 2vw, 15px);
+    font-weight: 300;
+  }
+
+  /* HER EKRANA UYUMLU AKILLI IZGARA */
+  .grid-group {
+    display: grid;
+    /* En küçük ekranda bile taşmayı önleyen mucizevi CSS satırı */
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 130px), 1fr));
+    gap: clamp(10px, 2vw, 15px);
+    align-items: stretch;
+  }
+
+  /* Custom Options */
+  .custom-option { height: 100%; }
+  .custom-option input { display: none; }
+  .custom-option label {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    min-height: clamp(60px, 10vw, 70px);
+    padding: 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--glass-border);
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: clamp(12px, 2vw, 14px);
+    text-align: center;
+    user-select: none;
+    line-height: 1.4;
+    color: #ccc;
+    /* Mobilde uzun metinlerin dışarı taşmasını engeller */
+    word-break: break-word; 
+  }
+  .custom-option label:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+  }
+  .custom-option input:checked + label {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 5px 15px rgba(217, 4, 41, 0.25);
+    font-weight: 500;
+    transform: translateY(-3px);
+  }
+
+  /* Navigation Buttons */
+  .wizard-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: clamp(30px, 6vw, 50px);
+    border-top: 1px solid var(--glass-border);
+    padding-top: clamp(20px, 4vw, 30px);
+    gap: 10px;
+  }
+
+  .btn-nav {
+    padding: clamp(12px, 3vw, 15px) clamp(20px, 4vw, 35px);
+    border-radius: 40px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(11px, 2vw, 13px);
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.4s;
+    border: none;
+    flex: 1; /* Mobilde butonların yan yana sığması için */
+    max-width: 200px;
+  }
+
+  .btn-prev {
+    background: transparent;
+    color: var(--text-muted);
+    border: 1px solid var(--glass-border);
+  }
+  .btn-prev:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+  }
+
+  .btn-next, .btn-submit {
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(217, 4, 41, 0.3);
+  }
+  .btn-next:hover, .btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(217, 4, 41, 0.5);
+  }
+  .btn-submit { display: none; }
+
+  /* Live Summary */
+  .live-summary {
+    margin-top: clamp(20px, 4vw, 40px);
+    font-size: clamp(11px, 2vw, 13px);
+    color: var(--text-muted);
+    text-align: center;
+    min-height: 20px;
+    letter-spacing: 1px;
+  }
+  .live-summary span { color: var(--primary); }
+
+  /* --- OVERLAY (SONUÇ EKRANI) --- */
+  #overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(11, 9, 10, 0.98);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+    z-index: 100;
+    padding: 20px;
+  }
+  #overlay.active {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .overlay-content {
+    background: var(--glass-bg);
+    border: 1px solid rgba(217, 4, 41, 0.2);
+    padding: clamp(30px, 6vw, 60px);
+    border-radius: clamp(16px, 4vw, 24px);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    /* Telefondan taşıp kaybolmasın diye kaydırma özelliği */
+    max-height: 90vh;
+    overflow-y: auto;
+    transform: translateY(40px);
+    transition: transform 0.5s ease;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+  }
+  #overlay.active .overlay-content { transform: translateY(0); }
+  
+  .overlay-content h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    font-size: clamp(24px, 5vw, 36px);
+    margin-bottom: clamp(15px, 3vw, 25px);
+    color: #fff;
+    letter-spacing: 2px;
+  }
+  .overlay-content p {
+    font-size: clamp(14px, 2.5vw, 16px);
+    line-height: 1.8;
+    margin-bottom: clamp(20px, 4vw, 40px);
+    color: #ccc;
+    font-weight: 300;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: clamp(10px, 2vw, 20px);
+    justify-content: center;
+    flex-wrap: wrap; /* Mobilde butonları alt alta alabilir */
+  }
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--primary);
+    color: #fff;
+    padding: clamp(12px, 3vw, 16px) clamp(20px, 4vw, 32px);
+    border-radius: 40px;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
+    font-size: clamp(11px, 2vw, 13px);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: 0.4s;
+    width: clamp(140px, 100%, 200px); /* Mobilde tam genişlik */
+  }
+  .btn-outline:hover {
+    background: var(--primary);
+    box-shadow: 0 5px 20px rgba(217, 4, 41, 0.4);
+  }
+
+  /* --- ÖZEL SİTE BİLDİRİMİ (TOAST) --- */
+  .toast-notification {
+    position: fixed;
+    bottom: clamp(20px, 5vw, 40px);
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(217, 4, 41, 0.95);
+    color: #fff;
+    padding: clamp(12px, 3vw, 16px) clamp(20px, 5vw, 32px);
+    border-radius: 40px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(12px, 2vw, 14px);
+    font-weight: 500;
+    letter-spacing: 1px;
+    box-shadow: 0 10px 40px rgba(217, 4, 41, 0.4);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+    width: max-content;
+    max-width: 90vw;
+    text-align: center;
+  }
+  .toast-notification.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+
+  /* --- VİTRİN (GALERİ) STİLLERİ --- */
+  .vitrin-container {
+    width: 100%;
+    /* PC'de ferah dursun diye genişliği artırdık */
+    max-width: 1200px; 
+    margin: 0 auto;
+    /* İŞTE SİHİR: Ekrana göre otomatik yan yana veya alt alta dizer */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: clamp(30px, 4vw, 50px);
+    padding-bottom: 50px;
+  }
+
+  .vitrin-item {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: clamp(16px, 4vw, 24px);
+    padding: clamp(15px, 3vw, 25px);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+    transition: transform 0.4s ease;
+  }
+  .vitrin-item:hover {
+    transform: translateY(-5px);
+    border-color: rgba(217, 4, 41, 0.3);
+  }
+  .vitrin-img-wrapper {
+    width: 100%;
+    /* Fotoğraflar PC'de çok uzamasın diye ekran yüksekliğinin %60'ı ile sınırlandırdık */
+    height: 50vh; 
+    border-radius: clamp(12px, 3vw, 16px);
+    overflow: hidden;
+    margin-bottom: 20px;
+    /* Fotoğraf tam sığdığında kenarda kalan boşluklar sırıtmasın diye şık bir arka plan */
+    background-color: rgba(0, 0, 0, 0.2); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .vitrin-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    /* KRİTİK NOKTA: "contain" fotoğrafı asla kırpmaz, bozmaz, çerçeveye mükemmel sığdırır */
+    object-fit: contain; 
+    transition: transform 0.5s ease;
+  }
+
+  .vitrin-img-wrapper:hover img {
+    transform: scale(1.03);
+  }
+  .vitrin-text {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(13px, 2.5vw, 15px);
+    color: #ccc;
+    line-height: 1.8;
+    font-weight: 300;
+    text-align: center;
+    font-style: italic;
+    padding: 0 10px;
+  }
+  .vitrin-header {
+    text-align: center;
+    margin-bottom: clamp(30px, 6vw, 50px);
+  }
+  .vitrin-header h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 300;
+    color: #fff;
+    letter-spacing: 2px;
+  }
+  .vitrin-header h2 span { color: var(--primary); font-style: italic; font-weight: 400;}
+
+  /* --- KOLEKSİYON (MEKTUPLAR) STİLLERİ --- */
+  .mektup-container {
+    width: 100%;
+    /* Okumayı kolaylaştırmak için çok geniş yapmıyoruz, derli toplu duracak */
+    max-width: 800px; 
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(30px, 5vw, 50px);
+    padding-bottom: 50px;
+  }
+  .mektup-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-left: 4px solid var(--primary); /* Sola şık bir kırmızı çizgi çektik */
+    border-radius: clamp(12px, 3vw, 16px);
+    padding: clamp(25px, 5vw, 40px);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: transform 0.4s ease;
+  }
+  .mektup-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(217, 4, 41, 0.4);
+  }
+  .mektup-tarih {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(11px, 2vw, 13px);
+    color: var(--primary);
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    display: block;
+  }
+  .mektup-baslik {
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(18px, 3vw, 24px);
+    color: #fff;
+    margin-bottom: 20px;
+    font-weight: 300;
+  }
+  .mektup-icerik {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(14px, 2.5vw, 15px);
+    color: #ccc;
+    line-height: 1.8;
+    font-weight: 300;
+    /* KRİTİK KOD: Kodun içinde Enter'a basıp alt satıra geçersen, sitede de aynen alt satıra geçer */
+    white-space: pre-line; 
+  }
+
+  /* --- FOOTER (COPYRIGHT) --- */
+  .site-footer {
+    text-align: center;
+    padding: clamp(20px, 4vw, 30px);
+    font-family: 'Montserrat', sans-serif;
+    font-size: clamp(10px, 2vw, 12px);
+    color: var(--text-muted);
+    letter-spacing: 2px;
+    width: 100%;
+    z-index: 10;
+  }
+  .site-footer span {
+    color: var(--primary);
+  }
+
+  /* Mobilde menüyü gizleme, şık bir şekilde sığdır */
+  @media (max-width: 600px) {
+    .navbar { 
+      flex-direction: column; 
+      gap: 12px;
+      padding: 15px 10px;
+      background: rgba(11, 9, 10, 0.98); /* Yazılar net okunsun diye hafif koyulaştırdık */
+    }
+    .nav-links { 
+      display: flex; 
+      gap: 20px; 
+    }
+    .nav-links a {
+      font-size: 11px; /* Telefona tam sığması için fontu küçülttük */
+      letter-spacing: 1px;
+    }
+  }
+  
+</style>
+</head>
+<body>
+
+  <div id="toast" class="toast-notification">Bildirim mesajı buraya gelecek</div>
+
+  <header class="navbar">
+    <div class="nav-logo" onclick="switchView('landingView')">M<span>🤍</span>E</div>
+    <div class="nav-links">
+      <a onclick="switchView('vitrinView')">Vitrin</a>
+      <a onclick="switchView('koleksiyonView')">Koleksiyon</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+
+    <div id="vitrinView" class="view-section">
+      <div class="vitrin-header">
+        <h2>En Güzel<span>Yanım🤍</span></h2>
+      </div>
+      <div class="vitrin-container">
+        
+        <div class="vitrin-item">
+          <div class="vitrin-img-wrapper">
+            <img src="pictures/170626.jpeg" alt="17.06.2026">
+          </div>
+          <p class="vitrin-text">"Senin yanında olduğum her an, sanki dünyanın geri kalanını birkaç dakikalığına unutuyorum.  
+Gülüşüne bakarken içimden geçenleri anlatmaya kelimeler yetmiyor, sadece sana biraz daha yakın olmak istiyorum.  
+Bu fotoğrafa her baktığımda, iyi ki hayatımda dediğim insanın sen olduğunu bir kez daha hissediyorum."</p>
+        </div>
+
+        <div class="vitrin-item">
+          <div class="vitrin-img-wrapper">
+            <img src="pictures/buyakaikea1.jpeg" alt="Buyaka Pasta">
+          </div>
+          <p class="vitrin-text">"Seni böyle kendi dünyanda, güzel bir şeyler yaparken izlemek bile bana tarifsiz bir huzur veriyor.  
+Sana baktığımda sadece güzelliğini değil, seni sen yapan o küçük ve güzel detayların hepsini görüyorum.  
+Belki söyleyemediğim çok şey var ama bilmeni isterim ki, sana her baktığımda kalbimde biraz daha güzel bir şey büyüyor."
+          </p>
+        </div>
+
+        <div class="vitrin-item">
+          <div class="vitrin-img-wrapper">
+            <img src="pictures/buyakaikea2.jpeg" alt="Buyaka Pasta 2">
+          </div>
+          <p class="vitrin-text">"Elimde tuttuğum  şey ne kadar güzel görünürse görünsün, benim gözüm yine de senden başkasını görmüyor.  
+Seninle geçirdiğim sıradan bir anın bile benim için unutulmayacak bir anıya dönüşmesini seviyorum.  
+Ve galiba en güzel tarafı da şu: Hayatın içinde böyle küçük anları seninle biriktirmek, benim en sevdiğim şey."</p>
+        </div>
+
+        <div class="vitrin-item">
+          <div class="vitrin-img-wrapper">
+            <img src="pictures/buyakastar.jpeg" alt="Buyaka Starbucks">
+          </div>
+          <p class="vitrin-text">"Yan yana olduğumuzda hiçbir şey söylemesek bile gözlerimiz birbirimize anlatacak çok şey buluyor.  
+Sana bu kadar yakın olmak, dünyanın bütün gürültüsünden uzaklaşıp sadece ikimizin olduğu bir yerdeymişim gibi hissettiriyor.  
+Ve her ne kadar bu fotoğrafta sadece bir anı saklıyor olsak da, ben o anın verdiği huzuru kalbimde saklıyorum."</p>
+        </div>
+
+        <div class="vitrin-item">
+          <div class="vitrin-img-wrapper">
+            <img src="pictures/buyakastar2.jpeg" alt="Buyaka Starbucks 2">
+          </div>
+          <p class="vitrin-text">"Elinin yüzümde olduğu o küçücük an bile bana, sevmenin bazen kelimelerden çok daha fazlası olduğunu hatırlatıyor.  
+Senin yanında kendimi olduğum kişiyle, hiçbir şeyi saklamadan ve hiçbir şeyden korkmadan sevmeyi seviyorum.  
+Keşke zamanı durdurabilsem de seninle böyle olduğumuz anları biraz daha uzun yaşayabilsem."</p>
+        </div>
+
+        <div class="vitrin-item">
+          <div class="vitrin-img-wrapper">
+            <img src="pictures/maltepesahil.jpeg" alt="Maltepe Sahil">
+          </div>
+          <p class="vitrin-text">"Bazen bir insanın sevgisini anlatmak için kocaman cümlelere gerek yok; bir bakış, bir dokunuş, bir öpücük her şeyi anlatmaya yetiyor.  
+Senin bana böyle sarıldığın her an, ne kadar şanslı olduğumu sessizce hatırlıyorum.  
+Gökyüzü ne kadar güzel olursa olsun, benim için bu fotoğrafın en güzel manzarası yine sensin."</p>
+        </div>
+
+      </div>
+    </div>
+    
+    <div id="landingView" class="view-section active">
+      <div class="hero">
+        <h1>En Güzel Anıları<br><span>Beraber Oluşturalım</span></h1>
+        <p>Her şeyin en iyisi, en güzeli seninle olsun istiyorum. 🤍 </p>
+        <button class="hero-btn" onclick="startBooking()">
+  Başlayalım 🤍
+</button>
+      </div>
+
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">🍷</div>
+          <h4>İmzalı Lokasyonlar</h4>
+          <p>Doyasıya eğlenip yaşayacağımız yeri seçmeye ne dersin? İstediklerini belirle seçimlerini yap gerisini bana bırak.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎭</div>
+          <h4>Anlık Ruh Haline Göre Kararlar</h4>
+          <p>Seçtiğin tarih, saat, ruh haline ve daha nice duruma göre hareket edelim.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">💌</div>
+          <h4>Gözlerin Kadar Güzel Şeyler Biriktirelim</h4>
+          <p>Kararlarını ver ve bana ilet. Verdiğin kararlara göre en güzel vakitleri seninle beraber geçireceğiz. Sözüm olsun. :)</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="bookingView" class="view-section">
+      <div class="container">
+        <button class="back-btn" onclick="switchView('landingView')">← Ana Sayfaya Dön</button>
+        
+        <div class="progress-container">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div class="step-indicator" id="stepIndicator">Adım 1 / 5</div>
+
+        <div class="wizard-step" id="step0">
+          <h3>Hangi Gün?</h3>
+          <p class="step-desc">İstediğin zaman sana vakit ayırabilirimm.</p>
+          <div class="grid-group" id="dayContainer"></div>
+        </div>
+
+        <div class="wizard-step" id="step1">
+          <h3>Ne zaman yapalım?</h3>
+          <p class="step-desc">İstediğin gibi.</p>
+          <div class="grid-group" id="timeContainer"></div>
+        </div>
+
+        <div class="wizard-step" id="step2">
+          <h3>Hangi Moddayız?</h3>
+          <p class="step-desc">Bugün nasıl hissediyorsunnn?</p>
+          <div class="grid-group" id="vibeContainer"></div>
+        </div>
+
+        <div class="wizard-step" id="step3">
+          <h3>Nerede olmalıyız?</h3>
+          <p class="step-desc">Buluşma noktamızı seç bakalımm.</p>
+          <div class="grid-group" id="locationContainer"></div>
+        </div>
+
+        <div class="wizard-step" id="step4">
+          <h3>Neler Yapıyoruz?</h3>
+          <p class="step-desc">Birden fazla seçenek işaretleyebilirsin.</p>
+          <div class="grid-group" id="activityContainer"></div>
+        </div>
+
+        <div class="live-summary" id="liveSummary">Rezervasyon Bekleniyor...</div>
+
+        <div class="wizard-nav">
+          <button class="btn-nav btn-prev" id="btnPrev" onclick="changeStep(-1)">Geri</button>
+          <button class="btn-nav btn-next" id="btnNext" onclick="changeStep(1)">Sonraki →</button>
+          <button class="btn-nav btn-submit" id="btnSubmit" onclick="generatePlan()">Planı Oluştur</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="koleksiyonView" class="view-section">
+      <div class="vitrin-header">
+        <h2>Bana Özel <span>Sana Güzel</span></h2>
+      </div>
+      <div class="mektup-container">
+        
+        <div class="mektup-card">
+          <span class="mektup-tarih">17.06.2026</span>
+          <h3 class="mektup-baslik">"Seni Düşündüm"</h3>
+          <p class="mektup-icerik">Bugün yine seni düşündüm. Aslında seni düşünmek için özel bir sebebe ihtiyacım olmadığını fark ediyorum artık. Günün ortasında aklıma bir bakışın geliyor, bir gülüşün geliyor, yanımda oturduğun bir an geliyor ve birkaç saniyeliğine bulunduğum yerden kopuyorum. Seninle geçirdiğim bazı anların neden bu kadar içime işlediğini hâlâ tam olarak anlayamıyorum. Belki de mesele yaşadığımız şeylerin büyüklüğü değil, senin yanındayken hissettiğim o tarifsiz rahatlık.
+
+Fotoğraflarımıza bakınca en çok bunu hissediyorum. Birbirimize öylece bakıyoruz, birbirimize dokunuyoruz, bazen hiçbir şey yapmadan yan yana duruyoruz. Ama benim için bütün mesele zaten burada. Seninle hayatın en sıradan anlarının bile bir anlam kazanmasını seviyorum. Bir gün dönüp geçmişe baktığımda, hatırlamak isteyeceğim şeylerin büyük olaylardan çok senin elinin yüzümde olduğu, bana baktığın ve benim içimden “işte, tam olarak burada olmak istiyorum” dediğim anlar olacağını düşünüyorum.</p>
+        </div>
+
+        <div class="mektup-card">
+          <span class="mektup-tarih">27.06.2026</span>
+          <h3 class="mektup-baslik">"Sana Bakarken"</h3>
+          <p class="mektup-icerik">Bazen sana bakarken içimde garip bir sessizlik oluyor. Söylemek istediğim o kadar çok şey oluyor ki hiçbirini söyleyemiyorum. Sanki kelimeler ne kadar uğraşsam da hissettiğim şeyin yanına yaklaşamıyor. Sana sarıldığımda ya da yüzüne dokunduğumda ise hiçbir şey anlatmama gerek kalmıyor. O an sadece seni sevdiğimi bilmek ve senin de bunu hissettiğini düşünmek yetiyor.
+
+Sanırım seni sevmenin en güzel tarafı, yanında kendimi başka biri gibi hissetmemek. Ne olduğum hâlimle, bütün saçmalıklarımla, suskunluklarımla, bazen gereğinden fazla düşündüğüm şeylerle bile yanında olabiliyorum. Ve sen yine de yanımda kalıyorsun. Belki de bu yüzden sana olan hislerim zaman geçtikçe azalmak yerine daha da derinleşiyor. Çünkü artık sadece seni sevmiyorum; seninle kurduğumuz o küçük dünyayı da çok seviyorum.</p>
+        </div>
+
+      <div class="mektup-card">
+          <span class="mektup-tarih">15.07.2026</span>
+          <h3 class="mektup-baslik">“Seni Sana Anlatmak”</h3>
+          <p class="mektup-icerik">Bir gün bunları okursan, bilmeni istediğim ilk şey şu olurdu: Sen hayatıma girdiğinden beri bazı şeylere bakışım gerçekten değişti. Önceden sıradan gördüğüm bazı anların ne kadar değerli olabileceğini seninle öğrendim. Birlikte oturmak, bir yere gitmek, saçma bir şeye gülmek, birbirimizin yüzüne bakmak… Dışarıdan bakıldığında hiçbirinin büyük bir anlamı olmayabilir ama benim için hepsi senden bir parça taşıyor.
+
+Ve belki sana her zaman anlatamıyorum ama seni kaybetme düşüncesi bile içimde garip bir boşluk oluşturuyor. Çünkü insan alıştığı bir şeyi kaybetmekten değil, kalbinin gerçekten bağlandığı bir şeyi kaybetmekten korkuyor. Benim sana olan bağımın böyle bir şey olduğunu hissediyorum. O yüzden bazen fazla düşünüyorum, bazen fazla hissediyorum, bazen söyleyemediğim şeyleri içimde büyütüyorum. Ama bütün bunların altında tek bir gerçek var: Seni hayatımda gerçekten istiyorum.</p>
+        </div>
+ 
+      <div class="mektup-card">
+          <span class="mektup-tarih">23.11.2026</span>
+          <h3 class="mektup-baslik">“Biz”</h3>
+          <p class="mektup-icerik">Bizim fotoğraflarımıza bakınca en çok hoşuma giden şey, hiçbirinin kusursuz görünmeye çalışmaması. Birinde gülüyoruz, birinde birbirimize sarılıyoruz, birinde sadece yan yana duruyoruz. Ama hepsinde aynı şeyi görüyorum: birbirimize gerçekten yakın olduğumuzu. Sanki fotoğraf çekildiği anda dünyanın geri kalanını birkaç dakikalığına unutmuşuz.
+
+Bilmiyorum gelecekte bizi neler bekliyor. Her şeyin her zaman kolay olacağını da düşünmüyorum. Ama şu an bildiğim bir şey var; seninle yaşadığım hiçbir şeyi sıradan bir şey olarak görmek istemiyorum. Çünkü bazı insanlar hayatımıza girer ve sadece hayatımızın bir parçası olurlar, bazılarıysa hayatımızın hissetme şeklini değiştirir. Sen benim için ikinci olanlardansın. Ve ne olursa olsun, seni sevdiğim bu hâlimi, sana bakarken içimde oluşan o tuhaf huzuru ve “iyi ki” hissini uzun süre unutacağımı sanmıyorum.</p>
+        </div>
+        
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    &copy; 2026 M🤍E. Tüm hakları ve güzel anıları Merve Özdemir'e saklıdır.
+  </footer>
+  
+  <div id="overlay">
+    <div class="overlay-content">
+      <h2>Rezervasyon Oluşturuldu</h2>
+      <p id="finalText"></p>
+      <div class="action-buttons">
+        <button class="btn-outline" onclick="copyPlan()">Daveti Kopyala</button>
+        <button class="btn-outline" onclick="resetAndGoHome()">Ana Sayfaya Dön</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+  // Veri Setleri
+  const days = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi", "Pazar"];
+  const times = ["Sabah", "Öğle", "Akşam Üstü", "Gece", "Tüm Gün"];
+  const vibes = ["Romantik", "Macera Dolu", "Chill & Rahat", "Nostaljik", "Eğlenceli"];
+  const locations = [
+    "Deniz Kenarı / Sahil", "Açık Hava Sineması", "Şık Bir Restoran", "Bar", "Kafe", 
+    "Sanat Galerisi", "Tarihi Bir Müze", "Sakin Bir Kitapçı", "Botanik Park", "Orman İçi Yürüyüş", 
+    "Kahvaltı Mekanı", "Canlı Müzik / Konser Alanı", "Lunapark", "Evin Terası / Balkonu", "Manzara Tepesi", 
+    "Sokak Lezzetleri", "Vintage Cafe", "Tiyatro Salonu", "Loş Bir Jazz Kulübü", "Şarap Evi", 
+    "Go-Kart Pisti", "Buz Pateni Pisti", "Gözlemevi / Planeteryum", "Dev Akvaryum", "Tarihi Yarımada Sokakları", 
+    "Renkli Çiçek Bahçesi", "Sessiz Bir İskele", "Göl Kenarı Piknik Alanı", "Şömine Başı", "Kaçış Odası",
+    "Sessiz Bir Kütüphane", "Vapur / Tekne"
+  ];
+  const activities = [
+    "Film / Dizi Maratonu", "Romantik Akşam Yemeği", "Sürpriz Tatlı Kaçamağı", "El Ele Uzun Yürüyüş", "Analog Çekim", 
+    "Playlist Paylaşımı & Müzik Dinleme", "Oyun Gecesi", "Karşılıklı Masaj / Spa Zamanı", "Gün Batımını İzlemek", "Birbirine Şiir / Kitap Okumak", 
+    "Birlikte Yemek / Tatlı Yapmak", "Uzun ve Derin Sohbet", "Sokak Hayvanlarını Beslemek", "Resim / Boyama Yapmak", "Kendi Kokteylini Hazırlamak", 
+    "Uyumlu Çift Kombini Yapmak", "Yıldızları İzlemek", "Sahilde Bisiklet Sürmek", "Arabada Bağıra Çağıra Şarkı Söylemek", "İçecek Tadımı", 
+    "Çarpışan Arabalara Binmek", "Birbirine Eğlenceli Fal Bakmak", "Birlikte Kanvas Tablo Boyamak", "Slow / Salsa Dans Etmek", "Geleceğe Mektup Yazmak", 
+    "Şehri Arabayla Amaçsızca Turlamak", "Kamp Ateşi / Ateş Çukuru Yakmak", "Birlikte Çadır Kurmak", "İddialı Bir Bilardo Maçı", "Sergileri Gezmek",
+    "Piknik Sepeti Hazırlamak", "Sadece Göz Göze Kalmak"
+  ];
+
+  // Render
+  function renderRadios(containerId, name, dataArray) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = dataArray.map((item, i) => `
+      <div class="custom-option">
+        <input type="radio" name="${name}" id="${name}_${i}" value="${item}">
+        <label for="${name}_${i}">${item}</label>
+      </div>`).join('');
+
+    container.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener('change', () => {
+        updateSummary();
+        if(currentStep < 4) setTimeout(() => changeStep(1), 350); 
+      });
+    });
+  }
+
+  function renderCheckboxes(containerId, name, dataArray) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = dataArray.map((item, i) => `
+      <div class="custom-option">
+        <input type="checkbox" name="${name}" id="${name}_${i}" value="${item}">
+        <label for="${name}_${i}">${item}</label>
+      </div>`).join('');
+
+    container.querySelectorAll('input[type="checkbox"]').forEach(input => {
+      input.addEventListener('change', updateSummary);
+    });
+  }
+
+  renderRadios('dayContainer', 'day', days);
+  renderRadios('timeContainer', 'time', times);
+  renderRadios('vibeContainer', 'vibe', vibes);
+  renderRadios('locationContainer', 'location', locations);
+  renderCheckboxes('activityContainer', 'activity', activities);
+
+  // Wizard Logic
+  let currentStep = 0;
+  const totalSteps = 5;
+
+  function startBooking() {
+    switchView('bookingView');
+    currentStep = 0;
+    updateWizardUI();
+  }
+
+  function changeStep(direction) {
+    currentStep = Math.max(0, Math.min(currentStep + direction, totalSteps - 1));
+    updateWizardUI();
+  }
+
+  function updateWizardUI() {
+    for (let i = 0; i < totalSteps; i++) {
+      document.getElementById(`step${i}`).classList.toggle('active', i === currentStep);
+    }
+    document.getElementById('progressBar').style.width = `${((currentStep + 1) / totalSteps) * 100}%`;
+    document.getElementById('stepIndicator').innerText = `Adım ${currentStep + 1} / ${totalSteps}`;
+    
+    document.getElementById('btnPrev').style.visibility = currentStep === 0 ? 'hidden' : 'visible';
+    document.getElementById('btnNext').style.display = currentStep === totalSteps - 1 ? 'none' : 'block';
+    document.getElementById('btnSubmit').style.display = currentStep === totalSteps - 1 ? 'block' : 'none';
+  }
+
+  function switchView(viewId) {
+    document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+    document.getElementById(viewId).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateSummary() {
+    const vals = ['day', 'time', 'vibe', 'location'].map(name => document.querySelector(`input[name='${name}']:checked`)?.value);
+    const acts = document.querySelectorAll("input[name='activity']:checked").length;
+    
+    let parts = vals.filter(Boolean).map(v => `<span>${v}</span>`);
+    if (acts > 0) parts.push(`<span>${acts} aktivite</span>`);
+
+    document.getElementById('liveSummary').innerHTML = parts.length ? "Plan Seçimleri: " + parts.join(" • ") : "Rezervasyon Bekleniyor...";
+  }
+
+  function showToast(message) {
+    const toast = document.getElementById("toast");
+    toast.innerText = message;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 3000);
+  }
+
+  let finalPlanTextForClipboard = "";
+
+  function generatePlan() {
+    const getVal = (name) => document.querySelector(`input[name='${name}']:checked`)?.value || "[Belirtilmedi]";
+    const acts = Array.from(document.querySelectorAll("input[name='activity']:checked")).map(el => el.value);
+    const actText = acts.length ? acts.join(" • ") : "[Belirtilmedi]";
+
+    finalPlanTextForClipboard = `💌 BİZİM PLANIMIZ 💌\n\n📅 Gün: ${getVal('day')}\n⏰ Zaman: ${getVal('time')}\n✨ Vibe: ${getVal('vibe')}\n📍 Mekan: ${getVal('location')}\n🎭 Aktiviteler: ${actText}\n\nHazır ol.`;
+
+    document.getElementById("finalText").innerHTML = `
+      <strong>Gün:</strong> ${getVal('day')} <br>
+      <strong>Zaman:</strong> ${getVal('time')} <br>
+      <strong>Vibe:</strong> ${getVal('vibe')} <br>
+      <strong>Mekan:</strong> ${getVal('location')} <br>
+      <br><strong>Aktiviteler:</strong><br> ${actText}
+    `;
+
+    // --- GİZLİ REZERVASYON BİLDİRİMİ (FORMSPREE) ---
+    fetch("https://formspree.io/f/xqedgdvb", {
+      method: "POST",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        "Mesaj": "Kral, yeni bir plan mühürlendi!",
+        "Gün": getVal('day'),
+        "Zaman": getVal('time'),
+        "Mod_Vibe": getVal('vibe'),
+        "Mekan": getVal('location'),
+        "Aktiviteler": actText
+      })
+    })
+    .then(response => console.log("Gizli haberci başarıyla uçtu!"))
+    .catch(error => console.error("Haberci takıldı:", error));
+    // --- BİTİŞ ---
+
+    document.getElementById("overlay").classList.add("active");
+}
+
+  function copyPlan() {
+    navigator.clipboard.writeText(finalPlanTextForClipboard)
+      .then(() => showToast("Davet metni başarıyla kopyalandı! 💌"))
+      .catch(() => showToast("Kopyalama başarısız oldu, lütfen tekrar deneyin."));
+  }
+
+  function resetAndGoHome() {
+    document.getElementById("overlay").classList.remove("active");
+    document.querySelectorAll('input[type="radio"], input[type="checkbox"]').forEach(i => i.checked = false);
+    updateSummary();
+    setTimeout(() => switchView('landingView'), 400);
+  }
+</script>
+
+</body>
+</html>
